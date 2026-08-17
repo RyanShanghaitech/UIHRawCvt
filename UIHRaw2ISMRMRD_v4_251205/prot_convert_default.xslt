@@ -79,12 +79,17 @@
 		<xsl:variable name="RampSampling"          		select="/UProtocol/Root/Seq/App/RampSampling/Value" />
 		
 		<xsl:variable name="GroGradAmp_mT_m"          	select="/UProtocol/Root/IRIP/FromSeq/App/GroGradAmp_mT_m/Value" />
-		<xsl:variable name="GroGradRampTime_us"        	select="/UProtocol/Root/IRIP/FromSeq/App/GroGradRampUpTime_us/Value" />
+		<xsl:variable name="GroGradRampUpTime_us"        	select="/UProtocol/Root/IRIP/FromSeq/App/GroGradRampUpTime_us/Value" />
 		<xsl:variable name="GroGradFlatTopTime_us"    	select="/UProtocol/Root/IRIP/FromSeq/App/GroGradFlatTopTime_us/Value" />
+		<xsl:variable name="GroGradRampDownTime_us"        	select="/UProtocol/Root/IRIP/FromSeq/App/GroGradRampDownTime_us/Value" />
 		<xsl:variable name="AdcStartTime_us"          	select="/UProtocol/Root/IRIP/FromSeq/App/AdcStartTime_us/Value" />
 		<xsl:variable name="AdcDwellTime_ns"          	select="/UProtocol/Root/Seq/Basic/Dwelltime/Value" />
 		<xsl:variable name="AdcTotalNumber"          	select="/UProtocol/Root/IRIP/FromSeq/App/AdcTotalSamples/Value" />
 		<xsl:variable name="RegridNumber"          		select="/UProtocol/Root/IRIP/FromSeq/App/RegriddingNumber/Value" />
+		
+		<!-- etl and numberOfNavigators-->
+		<xsl:variable name="etl"          				select="/UProtocol/Root/Seq/KSpace/Segments/Value" />
+		<xsl:variable name="numberOfNavigators">3</xsl:variable>
     <!-- variable end -->
     
     <ismrmrdHeader xmlns="http://www.ismrm.org/ISMRMRD" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.ismrm.org/ISMRMRD ismrmrd.xsd" >
@@ -427,7 +432,7 @@
 			<trajectoryDescription>
 				<xsl:choose>
 					<xsl:when test="$RampSampling = 'true' ">
-					    <identifier>R</identifier>
+					    <identifier>cartesian</identifier>
 					</xsl:when>
 					<xsl:otherwise>
 					    <identifier>UR</identifier>
@@ -441,15 +446,39 @@
 						</value>
 					</userParameterDouble>
 					<userParameterLong>
-						<name>GroGradRampTime_us</name>
+						<name>etl</name>
 						<value>
-							<xsl:value-of select="$GroGradRampTime_us"/>
+							<xsl:value-of select="$etl"/>
 						</value>
 					</userParameterLong>
 					<userParameterLong>
-						<name>GroGradFlatTopTime_us</name>
+						<name>numberOfNavigators</name>
+						<value>
+							<xsl:value-of select="$numberOfNavigators"/>
+						</value>
+					</userParameterLong>
+					<userParameterLong>
+						<name>rampUpTime</name>
+						<value>
+							<xsl:value-of select="$GroGradRampUpTime_us"/>
+						</value>
+					</userParameterLong>
+					<userParameterLong>
+						<name>rampDownTime</name>
+						<value>
+							<xsl:value-of select="$GroGradRampDownTime_us"/>
+						</value>
+					</userParameterLong>
+					<userParameterLong>
+						<name>flatTopTime</name>
 						<value>
 							<xsl:value-of select="$GroGradFlatTopTime_us"/>
+						</value>
+					</userParameterLong>
+					<userParameterLong>
+						<name>acqDelayTime</name>
+						<value>
+							<xsl:value-of select="$AdcStartTime_us"/>
 						</value>
 					</userParameterLong>
 					<userParameterDouble>
@@ -459,7 +488,7 @@
 						</value>
 					</userParameterDouble>
 					<userParameterDouble>
-						<name>AdcDwellTime_us</name>
+						<name>dwellTime</name>
 						<value>
 							<xsl:value-of select="$AdcDwellTime_ns div 2000.0"/>
 						</value>
@@ -477,7 +506,7 @@
 						</value>
 					</userParameterLong>
 				</xsl:if>
-				<comment>R:RampSampling; UR:UnRampSampling</comment>
+				<comment>cartesian:RampSampling; UR:UnRampSampling</comment>
 			</trajectoryDescription>
 		</encoding>
       

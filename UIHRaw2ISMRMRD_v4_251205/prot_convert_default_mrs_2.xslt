@@ -375,6 +375,10 @@
 			
 			<!-- Here fill ttrajectory to cartesian-->
 			<trajectory>cartesian</trajectory>
+			<trajectoryDescription>
+				<identifier>UR</identifier>
+				<comment>UR:UnRampSampling</comment>
+			</trajectoryDescription>
         </encoding>
       
         <sequenceParameters>
